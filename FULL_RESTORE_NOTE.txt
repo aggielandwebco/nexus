@@ -1,0 +1,13 @@
+This bundle includes:
+- src folder
+- entities folder
+- vite/tailwind configs
+- package.json
+- jsconfig
+- postcss config
+- readme
+- gitignore
+
+Use:
+npm install
+npm run dev
