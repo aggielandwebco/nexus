@@ -1,9 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --font-inter: "Inter", sans-serif;
     --background: 0 0% 3%;
     --foreground: 0 0% 98%;
     --card: 240 6% 10%;
@@ -32,6 +35,6 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground font-inter antialiased;
   }
 }
