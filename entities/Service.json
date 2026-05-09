@@ -1,0 +1,31 @@
+{
+  "name": "Service",
+  "type": "object",
+  "properties": {
+    "business_id": {
+      "type": "string",
+      "description": "Associated business ID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Service name"
+    },
+    "category": {
+      "type": "string",
+      "description": "Service category"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Duration in minutes"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price in dollars"
+    },
+    "description": {
+      "type": "string",
+      "description": "Service description"
+    }
+  },
+  "required": ["business_id", "name"]
+}
