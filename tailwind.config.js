@@ -6,6 +6,10 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        inter: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
