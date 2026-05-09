@@ -1,88 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+import animate from "tailwindcss-animate";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --font-inter: 'Inter', sans-serif;
-    --background: 0 0% 6.7%;
-    --foreground: 0 0% 96.1%;
-    --card: 0 0% 11.8%;
-    --card-foreground: 0 0% 96.1%;
-    --popover: 0 0% 11.8%;
-    --popover-foreground: 0 0% 96.1%;
-    --primary: 41 49% 57%;
-    --primary-foreground: 0 0% 6.7%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 96.1%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 336 100% 15%;
-    --accent-foreground: 0 0% 96.1%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 41 49% 57%;
-    --chart-1: 41 49% 57%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 96.1%;
-    --sidebar-primary: 41 49% 57%;
-    --sidebar-primary-foreground: 0 0% 6.7%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 96.1%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 41 49% 57%;
-  }
-
-  .dark {
-    --background: 0 0% 6.7%;
-    --foreground: 0 0% 96.1%;
-    --card: 0 0% 11.8%;
-    --card-foreground: 0 0% 96.1%;
-    --popover: 0 0% 11.8%;
-    --popover-foreground: 0 0% 96.1%;
-    --primary: 41 49% 57%;
-    --primary-foreground: 0 0% 6.7%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 96.1%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 336 100% 15%;
-    --accent-foreground: 0 0% 96.1%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 41 49% 57%;
-    --chart-1: 41 49% 57%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 96.1%;
-    --sidebar-primary: 41 49% 57%;
-    --sidebar-primary-foreground: 0 0% 6.7%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 96.1%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 41 49% 57%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground font-inter;
-  }
-}
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        inter: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))"
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))"
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))"
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))"
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))"
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))"
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))"
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar))",
+          border: "hsl(var(--sidebar-border))"
+        }
+      }
+    }
+  },
+  plugins: [animate]
+};
