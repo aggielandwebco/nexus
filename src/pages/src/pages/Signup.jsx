@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Signup() {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     fullName: "",
     businessName: "",
@@ -73,9 +71,7 @@ export default function Signup() {
             <label className="text-sm font-medium">Business name</label>
             <input
               value={form.businessName}
-              onChange={(event) =>
-                updateField("businessName", event.target.value)
-              }
+              onChange={(event) => updateField("businessName", event.target.value)}
               className="mt-1 w-full rounded-md border bg-background px-3 py-2"
             />
           </div>
