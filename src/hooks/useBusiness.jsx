@@ -1,9 +1,12 @@
 import { createContext, useContext } from "react";
 
+const DEFAULT_BUSINESS = {
+  id: "integris-nexus-main",
+  name: "Integris Nexus"
+};
+
 const BusinessContext = createContext({
-  business: {
-    name: "Aggieland Web Co"
-  },
+  business: DEFAULT_BUSINESS,
   loading: false
 });
 
@@ -11,9 +14,7 @@ export function BusinessProvider({ children }) {
   return (
     <BusinessContext.Provider
       value={{
-        business: {
-          name: "Aggieland Web Co"
-        },
+        business: DEFAULT_BUSINESS,
         loading: false
       }}
     >
