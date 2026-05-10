@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
-import { useBusiness } from '@/hooks/useBusiness';
+import { getCustomers } from '@/lib/customerService';
 import { Users, UserPlus, CalendarDays, Star } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '@/components/ui/card';
@@ -9,38 +8,21 @@ import StarRating from '@/components/shared/StarRating';
 import { format, subMonths, addDays, isAfter, isBefore, startOfMonth, endOfMonth } from 'date-fns';
 
 export default function Dashboard() {
-  const { business } = useBusiness();
-
-  const { data: customers = [] } = useQuery({
-    queryKey: ['customers', business?.id],
-    queryFn: () => base44.entities.Customer.filter({ business_id: business.id }),
-    enabled: !!business?.id,
+  const { data: customers = [], isLoading, error } = useQuery({
+    queryKey: ['customers', false],
+    queryFn: () => getCustomers({ archived: false }),
   });
 
-  const { data: appointments = [] } = useQuery({
-    queryKey: ['appointments', business?.id],
-    queryFn: () => base44.entities.Appointment.filter({ business_id: business.id }),
-    enabled: !!business?.id,
-  });
-
-  const { data: reviews = [] } = useQuery({
-    queryKey: ['reviews', business?.id],
-    queryFn: () => base44.entities.Review.filter({ business_id: business.id }),
-    enabled: !!business?.id,
-  });
-
-  const { data: services = [] } = useQuery({
-    queryKey: ['services', business?.id],
-    queryFn: () => base44.entities.Service.filter({ business_id: business.id }),
-    enabled: !!business?.id,
-  });
+  const appointments = [];
+  const reviews = [];
+  const services = [];
 
   const now = new Date();
   const thisMonthStart = startOfMonth(now);
   const next7Days = addDays(now, 7);
 
   const newLeadsThisMonth = customers.filter(c => {
-    const created = new Date(c.created_date);
+    const created = new Date(c.created_at || c.created_date);
     return isAfter(created, thisMonthStart) && c.status === 'New Lead';
   }).length;
 
@@ -58,7 +40,7 @@ export default function Dashboard() {
   for (let i = 5; i >= 0; i--) {
     const monthDate = subMonths(now, i);
     const monthEnd = endOfMonth(monthDate);
-    const count = customers.filter(c => new Date(c.created_date) <= monthEnd).length;
+    const count = customers.filter(c => new Date(c.created_at || c.created_date) <= monthEnd).length;
     growthData.push({ month: format(monthDate, 'MMM'), customers: count });
   }
 
@@ -79,6 +61,18 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
+
+      {isLoading && (
+        <Card className="p-4 bg-card border-border">
+          <p className="text-sm text-muted-foreground">Loading dashboard...</p>
+        </Card>
+      )}
+
+      {error && (
+        <Card className="p-4 bg-destructive/10 border-destructive/40">
+          <p className="text-sm text-destructive">{error.message}</p>
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard title="Total Customers" value={customers.length} icon={Users} />
