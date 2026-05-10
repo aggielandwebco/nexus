@@ -1,11 +1,11 @@
 {
   "name": "Integris Nexus",
   "short_name": "Nexus",
-  "description": "CRM and customer growth platform under the Integris Systems ecosystem.",
+  "description": "Customer Relations Management Software and customer growth platform under the Integris Systems ecosystem.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111315",
-  "theme_color": "#4A6C8C",
+  "background_color": "#afbcc9",
+  "theme_color": "#666666",
   "icons": [
     {
       "src": "/icon-192.png",
