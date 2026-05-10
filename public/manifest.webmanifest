@@ -1,11 +1,11 @@
 {
-  "name": "AW Nexus",
-  "short_name": "AW Nexus",
-  "description": "CRM dashboard for local business growth.",
+  "name": "Integris Nexus",
+  "short_name": "Nexus",
+  "description": "CRM and customer growth platform under the Integris Systems ecosystem.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#d61f45",
+  "background_color": "#111315",
+  "theme_color": "#4A6C8C",
   "icons": [
     {
       "src": "/icon-192.png",

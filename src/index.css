@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,27 +7,51 @@
 @layer base {
   :root {
     --font-inter: "Inter", sans-serif;
-    --background: 0 0% 3%;
-    --foreground: 0 0% 98%;
-    --card: 240 6% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 6% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 348 83% 47%;
+    --background: 210 10% 7%;
+    --foreground: 220 14% 96%;
+    --card: 220 13% 13%;
+    --card-foreground: 220 14% 96%;
+    --popover: 220 13% 13%;
+    --popover-foreground: 220 14% 96%;
+    --primary: 207 31% 42%;
+    --primary-foreground: 220 14% 96%;
+    --secondary: 220 12% 16%;
+    --secondary-foreground: 220 14% 96%;
+    --muted: 220 12% 16%;
+    --muted-foreground: 220 9% 68%;
+    --accent: 39 44% 60%;
+    --accent-foreground: 210 10% 7%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 14% 96%;
+    --border: 0 0% 100% / 0.08;
+    --input: 0 0% 100% / 0.12;
+    --ring: 207 31% 42%;
+    --sidebar: 220 13% 10%;
+    --sidebar-border: 0 0% 100% / 0.08;
+  }
+
+  .light {
+    --background: 220 20% 98%;
+    --foreground: 220 20% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 9%;
+    --primary: 207 31% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 348 83% 47%;
+    --secondary: 220 16% 94%;
+    --secondary-foreground: 220 20% 9%;
+    --muted: 220 16% 94%;
+    --muted-foreground: 220 9% 42%;
+    --accent: 39 44% 52%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
-    --ring: 348 83% 47%;
-    --sidebar: 240 6% 7%;
-    --sidebar-border: 240 4% 16%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 18% / 0.12;
+    --input: 220 15% 18% / 0.14;
+    --ring: 207 31% 42%;
+    --sidebar: 0 0% 100%;
+    --sidebar-border: 220 15% 18% / 0.12;
   }
 
   * {
@@ -36,5 +60,18 @@
 
   body {
     @apply bg-background text-foreground font-inter antialiased;
+  }
+}
+
+@layer components {
+  .nexus-container {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .nexus-glow {
+    background:
+      radial-gradient(circle at top left, rgba(74, 108, 140, 0.28), transparent 34rem),
+      radial-gradient(circle at top right, rgba(198, 165, 107, 0.16), transparent 30rem),
+      #111315;
   }
 }

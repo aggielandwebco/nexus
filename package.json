@@ -1,5 +1,5 @@
 {
-  "name": "aw-nexus",
+  "name": "integris-nexus",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -44,7 +44,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@stripe/react-stripe-js": "^3.0.0",
     "@stripe/stripe-js": "^5.2.0",
-    "@supabase/supabase-js": "^2.48.1",
+    "@supabase/supabase-js": "^2.105.4",
     "@tanstack/react-query": "^5.84.1",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
@@ -98,4 +98,3 @@
     "vite": "^6.1.0"
   }
 }
-

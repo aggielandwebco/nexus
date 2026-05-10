@@ -1,6 +1,6 @@
-# AW Nexus
+# Integris Nexus
 
-Aggieland Web Co CRM dashboard.
+CRM and customer growth platform under the Integris Systems ecosystem.
 
 ## Install
 
