@@ -60,21 +60,15 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
   }, [service, open]);
 
   const handlePriceChange = (value) => {
-    const cleaned = String(value).replace(/[^0-9.]/g, "");
-    if (cleaned === "") {
-      setForm((prev) => ({ ...prev, price: "" }));
+    const digits = String(value).replace(/\D/g, "");
+    if (digits === "") {
+      setForm((prev) => ({ ...prev, price: formatCurrency(0) }));
       return;
     }
 
-    const [integer, decimals = ""] = cleaned.split(".");
-    const normalized = `${integer}${decimals ? `.${decimals.slice(0, 2)}` : ""}`;
-
-    if (decimals.length > 0 && decimals.length < 2) {
-      setForm((prev) => ({ ...prev, price: normalized }));
-      return;
-    }
-
-    setForm((prev) => ({ ...prev, price: formatCurrency(normalized) }));
+    const cents = Number(digits);
+    const dollars = cents / 100;
+    setForm((prev) => ({ ...prev, price: formatCurrency(dollars) }));
   };
 
   const handleSubmit = (event) => {
@@ -114,7 +108,6 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
                 type="text"
                 value={form.price}
                 onChange={(event) => handlePriceChange(event.target.value)}
-                onBlur={(event) => setForm((prev) => ({ ...prev, price: formatCurrency(event.target.value) }))}
               />
             </div>
           </div>
