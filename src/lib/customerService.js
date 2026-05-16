@@ -41,9 +41,21 @@ export async function createCustomer(customerData) {
 }
 
 export async function updateCustomer(id, updates) {
+  const payload = {};
+  if (Object.prototype.hasOwnProperty.call(updates, "business_id")) payload.business_id = updates.business_id;
+  if (Object.prototype.hasOwnProperty.call(updates, "user_id")) payload.user_id = updates.user_id;
+  if (Object.prototype.hasOwnProperty.call(updates, "name")) payload.name = updates.name?.trim();
+  if (Object.prototype.hasOwnProperty.call(updates, "email")) payload.email = updates.email?.trim() || null;
+  if (Object.prototype.hasOwnProperty.call(updates, "phone")) payload.phone = updates.phone?.trim() || null;
+  if (Object.prototype.hasOwnProperty.call(updates, "status")) payload.status = updates.status;
+  if (Object.prototype.hasOwnProperty.call(updates, "tags")) payload.tags = Array.isArray(updates.tags) ? updates.tags : [];
+  if (Object.prototype.hasOwnProperty.call(updates, "notes")) payload.notes = updates.notes?.trim() || null;
+  if (Object.prototype.hasOwnProperty.call(updates, "follow_up_date")) payload.follow_up_date = updates.follow_up_date || null;
+  if (Object.prototype.hasOwnProperty.call(updates, "follow_up_note")) payload.follow_up_note = updates.follow_up_note?.trim() || null;
+
   const { data, error } = await supabase
     .from("customers")
-    .update(cleanCustomerData(updates))
+    .update(payload)
     .eq("id", id)
     .select()
     .single();

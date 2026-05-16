@@ -71,6 +71,10 @@ before update on bookings
 for each row
 execute function update_updated_at_column();
 
+alter table customers add column if not exists user_id uuid null;
+alter table services add column if not exists user_id uuid null;
+alter table bookings add column if not exists user_id uuid null;
+
 alter table customers enable row level security;
 alter table services enable row level security;
 alter table bookings enable row level security;
