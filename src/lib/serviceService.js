@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 function cleanServiceData(serviceData) {
   return {
     business_id: serviceData.business_id || null,
+    user_id: serviceData.user_id || null,
     name: serviceData.name?.trim() || "",
     category: serviceData.category?.trim() || "General",
     duration_minutes: Number(serviceData.duration_minutes) || 30,

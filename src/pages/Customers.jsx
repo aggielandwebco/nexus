@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Archive, ArchiveRestore, Pencil, Plus, Search, X } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 import { archiveCustomer, createCustomer, getCustomers, restoreCustomer, updateCustomer } from "@/lib/customerService";
 import { getBusinessId } from "@/lib/app-params";
 import { Badge } from "@/components/ui/badge";
@@ -196,9 +197,18 @@ export default function Customers() {
   };
 
   const saveMutation = useMutation({
-    mutationFn: (customerData) => {
-      const withBusiness = { ...customerData, business_id: getBusinessId() };
-      return selectedCustomer ? updateCustomer(selectedCustomer.id, withBusiness) : createCustomer(withBusiness);
+    mutationFn: async (customerData) => {
+      const {
+        data: { user },
+        error
+      } = await supabase.auth.getUser();
+      if (error) throw error;
+      if (!user) throw new Error("Authentication required.");
+
+      const payload = { ...customerData, business_id: getBusinessId() };
+      if (!selectedCustomer) payload.user_id = user.id;
+
+      return selectedCustomer ? updateCustomer(selectedCustomer.id, payload) : createCustomer(payload);
     },
     onSuccess: () => {
       setNotice(selectedCustomer ? "Customer updated." : "Customer added.");

@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/lib/supabaseClient";
 import {
   createService,
   deactivateService,
@@ -157,9 +158,18 @@ export default function Services() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (form) => {
-      const withBusiness = { ...form, price: parseCurrency(form.price), business_id: getBusinessId() };
-      return editingService ? updateService(editingService.id, withBusiness) : createService(withBusiness);
+    mutationFn: async (form) => {
+      const {
+        data: { user },
+        error
+      } = await supabase.auth.getUser();
+      if (error) throw error;
+      if (!user) throw new Error("Authentication required.");
+
+      const payload = { ...form, price: parseCurrency(form.price), business_id: getBusinessId() };
+      if (!editingService) payload.user_id = user.id;
+
+      return editingService ? updateService(editingService.id, payload) : createService(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });

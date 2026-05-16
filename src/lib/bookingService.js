@@ -5,6 +5,7 @@ function cleanBookingData(bookingData) {
     customer_id: bookingData.customer_id || null,
     service_id: bookingData.service_id || null,
     business_id: bookingData.business_id || null,
+    user_id: bookingData.user_id || null,
     date: bookingData.date || null,
     time: bookingData.time || null,
     status: bookingData.status || "Scheduled",

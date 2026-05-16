@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { getCustomers } from "@/lib/customerService";
 import { getServices } from "@/lib/serviceService";
+import { supabase } from "@/lib/supabaseClient";
 import { cancelBooking, createBooking, getBookings, updateBooking } from "@/lib/bookingService";
 import { getBusinessId } from "@/lib/app-params";
 
@@ -184,9 +185,18 @@ export default function Bookings() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (form) => {
-      const withBusiness = { ...form, business_id: getBusinessId() };
-      return editingBooking ? updateBooking(editingBooking.id, withBusiness) : createBooking(withBusiness);
+    mutationFn: async (form) => {
+      const {
+        data: { user },
+        error
+      } = await supabase.auth.getUser();
+      if (error) throw error;
+      if (!user) throw new Error("Authentication required.");
+
+      const payload = { ...form, business_id: getBusinessId() };
+      if (!editingBooking) payload.user_id = user.id;
+
+      return editingBooking ? updateBooking(editingBooking.id, payload) : createBooking(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
