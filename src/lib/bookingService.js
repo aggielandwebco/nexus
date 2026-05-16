@@ -32,6 +32,11 @@ export async function getBookings() {
 export async function createBooking(bookingData) {
   const payload = cleanBookingData(bookingData);
 
+  // Validate required fields before sending to Supabase to avoid DB constraint errors
+  if (!payload.date || !payload.time) {
+    throw new Error("Booking must include a date and time.");
+  }
+
   const { data, error } = await supabase
     .from("bookings")
     .insert(payload)
@@ -48,7 +53,16 @@ export async function createBooking(bookingData) {
 }
 
 export async function updateBooking(id, updates) {
-  const payload = cleanBookingData(updates);
+  // Build a partial payload for updates so we don't overwrite unspecified fields with null/defaults
+  const payload = {};
+  if (Object.prototype.hasOwnProperty.call(updates, "customer_id")) payload.customer_id = updates.customer_id;
+  if (Object.prototype.hasOwnProperty.call(updates, "service_id")) payload.service_id = updates.service_id;
+  if (Object.prototype.hasOwnProperty.call(updates, "business_id")) payload.business_id = updates.business_id;
+  if (Object.prototype.hasOwnProperty.call(updates, "date")) payload.date = updates.date;
+  if (Object.prototype.hasOwnProperty.call(updates, "time")) payload.time = updates.time;
+  if (Object.prototype.hasOwnProperty.call(updates, "status")) payload.status = updates.status;
+  if (Object.prototype.hasOwnProperty.call(updates, "notes")) payload.notes = updates.notes;
+  if (Object.prototype.hasOwnProperty.call(updates, "archived")) payload.archived = updates.archived;
 
   const { data, error } = await supabase
     .from("bookings")

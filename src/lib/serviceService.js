@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 function cleanServiceData(serviceData) {
   return {
+    business_id: serviceData.business_id || null,
     name: serviceData.name?.trim() || "",
     category: serviceData.category?.trim() || "General",
     duration_minutes: Number(serviceData.duration_minutes) || 30,
@@ -54,9 +55,17 @@ export async function createService(serviceData) {
 }
 
 export async function updateService(id, updates) {
-  const payload = cleanServiceData(updates);
+  // Build a partial payload for updates so we don't overwrite unspecified fields
+  const payload = {};
+  if (Object.prototype.hasOwnProperty.call(updates, "name")) payload.name = updates.name?.trim() || "";
+  if (Object.prototype.hasOwnProperty.call(updates, "category")) payload.category = updates.category?.trim() || "General";
+  if (Object.prototype.hasOwnProperty.call(updates, "duration_minutes")) payload.duration_minutes = Number(updates.duration_minutes) || 30;
+  if (Object.prototype.hasOwnProperty.call(updates, "price")) payload.price = Number(updates.price) || 0;
+  if (Object.prototype.hasOwnProperty.call(updates, "description")) payload.description = updates.description?.trim() || null;
+  if (Object.prototype.hasOwnProperty.call(updates, "active")) payload.active = updates.active;
 
-  if (!payload.name) {
+  // If the update includes a name, ensure it's not empty
+  if (Object.prototype.hasOwnProperty.call(payload, "name") && !payload.name) {
     throw new Error("Service name is required.");
   }
 

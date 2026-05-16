@@ -52,3 +52,15 @@ const getAppParams = () => {
 export const appParams = {
 	...getAppParams()
 }
+
+export function getBusinessId() {
+	if (typeof window === 'undefined') return null;
+	// check URL params/localStorage for a business_id set by the app or dev
+	const urlParams = new URLSearchParams(window.location.search);
+	const fromUrl = urlParams.get("business_id");
+	if (fromUrl) return fromUrl;
+	const stored = window.localStorage.getItem("business_id");
+	if (stored) return stored;
+	// fallback to environment variable if provided
+	return import.meta.env.VITE_BUSINESS_ID || null;
+}

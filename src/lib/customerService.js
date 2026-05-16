@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 function cleanCustomerData(customerData) {
   return {
+    business_id: customerData.business_id || null,
     name: customerData.name?.trim(),
     email: customerData.email?.trim() || null,
     phone: customerData.phone?.trim() || null,

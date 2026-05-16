@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Archive, ArchiveRestore, Pencil, Plus, Search, X } from "lucide-react";
 import { archiveCustomer, createCustomer, getCustomers, restoreCustomer, updateCustomer } from "@/lib/customerService";
+import { getBusinessId } from "@/lib/app-params";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -177,7 +178,10 @@ export default function Customers() {
   };
 
   const saveMutation = useMutation({
-    mutationFn: (customerData) => (selectedCustomer ? updateCustomer(selectedCustomer.id, customerData) : createCustomer(customerData)),
+    mutationFn: (customerData) => {
+      const withBusiness = { ...customerData, business_id: getBusinessId() };
+      return selectedCustomer ? updateCustomer(selectedCustomer.id, withBusiness) : createCustomer(withBusiness);
+    },
     onSuccess: () => {
       setNotice(selectedCustomer ? "Customer updated." : "Customer added.");
       setActionError("");

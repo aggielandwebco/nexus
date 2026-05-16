@@ -15,6 +15,7 @@ import {
   restoreService,
   updateService
 } from "@/lib/serviceService";
+import { getBusinessId } from "@/lib/app-params";
 
 const emptyForm = {
   name: "",
@@ -129,7 +130,10 @@ export default function Services() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (form) => (editingService ? updateService(editingService.id, form) : createService(form)),
+    mutationFn: (form) => {
+      const withBusiness = { ...form, business_id: getBusinessId() };
+      return editingService ? updateService(editingService.id, withBusiness) : createService(withBusiness);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });
       setModalOpen(false);

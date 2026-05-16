@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { getCustomers } from "@/lib/customerService";
 import { getServices } from "@/lib/serviceService";
 import { cancelBooking, createBooking, getBookings, updateBooking } from "@/lib/bookingService";
+import { getBusinessId } from "@/lib/app-params";
 
 const STATUSES = ["Scheduled", "Confirmed", "Completed", "Cancelled"];
 
@@ -183,7 +184,10 @@ export default function Bookings() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (form) => (editingBooking ? updateBooking(editingBooking.id, form) : createBooking(form)),
+    mutationFn: (form) => {
+      const withBusiness = { ...form, business_id: getBusinessId() };
+      return editingBooking ? updateBooking(editingBooking.id, withBusiness) : createBooking(withBusiness);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
       setModalOpen(false);
