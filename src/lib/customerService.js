@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentProfile } from "@/lib/authService";
 
 function cleanCustomerData(customerData) {
   return {
@@ -16,11 +17,18 @@ function cleanCustomerData(customerData) {
 }
 
 export async function getCustomers({ archived = false } = {}) {
-  const { data, error } = await supabase
+  const { user, profile } = await getCurrentProfile();
+  const query = supabase
     .from("customers")
     .select("*")
     .eq("archived", archived)
     .order("created_at", { ascending: false });
+
+  if (profile.role !== "developer") {
+    query.eq("user_id", user.id);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
   return data || [];

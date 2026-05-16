@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentProfile } from "@/lib/authService";
 
 function cleanBookingData(bookingData) {
   return {
@@ -15,12 +16,19 @@ function cleanBookingData(bookingData) {
 }
 
 export async function getBookings() {
-  const { data, error } = await supabase
+  const { user, profile } = await getCurrentProfile();
+  const query = supabase
     .from("bookings")
     .select("*")
     .eq("archived", false)
     .order("date", { ascending: true })
     .order("time", { ascending: true });
+
+  if (profile.role !== "developer") {
+    query.eq("user_id", user.id);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("getBookings error:", error);

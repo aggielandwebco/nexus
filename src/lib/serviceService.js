@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentProfile } from "@/lib/authService";
 
 function cleanServiceData(serviceData) {
   return {
@@ -14,6 +15,7 @@ function cleanServiceData(serviceData) {
 }
 
 export async function getServices({ active = true } = {}) {
+  const { user, profile } = await getCurrentProfile();
   const query = supabase
     .from("services")
     .select("*")
@@ -21,6 +23,10 @@ export async function getServices({ active = true } = {}) {
 
   if (active !== "all") {
     query.eq("active", active);
+  }
+
+  if (profile.role !== "developer") {
+    query.eq("user_id", user.id);
   }
 
   const { data, error } = await query;
