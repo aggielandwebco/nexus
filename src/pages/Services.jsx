@@ -21,9 +21,26 @@ const emptyForm = {
   name: "",
   category: "General",
   duration_minutes: 30,
-  price: 0,
+  price: "0.00",
   description: ""
 };
+
+function formatCurrency(value) {
+  const raw = Number(String(value).replace(/[^0-9.]/g, ""));
+  if (Number.isNaN(raw)) return "0.00";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(raw);
+}
+
+function parseCurrency(value) {
+  const cleaned = String(value).replace(/[^0-9.]/g, "");
+  const parsed = parseFloat(cleaned);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
 
 function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
   const [form, setForm] = useState(emptyForm);
@@ -34,7 +51,7 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
         name: service.name || "",
         category: service.category || "General",
         duration_minutes: service.duration_minutes || 30,
-        price: service.price || 0,
+        price: formatCurrency(service.price || 0),
         description: service.description || ""
       });
     } else {
@@ -76,11 +93,11 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
             <div className="space-y-2">
               <Label>Price</Label>
               <Input
-                type="number"
-                min="0"
-                step="0.01"
+                type="text"
                 value={form.price}
                 onChange={(event) => setForm((prev) => ({ ...prev, price: event.target.value }))}
+                onBlur={(event) => setForm((prev) => ({ ...prev, price: formatCurrency(event.target.value) }))}
+                onFocus={(event) => setForm((prev) => ({ ...prev, price: String(parseCurrency(event.target.value) || "") }))}
               />
             </div>
           </div>
@@ -131,7 +148,7 @@ export default function Services() {
 
   const saveMutation = useMutation({
     mutationFn: (form) => {
-      const withBusiness = { ...form, business_id: getBusinessId() };
+      const withBusiness = { ...form, price: parseCurrency(form.price), business_id: getBusinessId() };
       return editingService ? updateService(editingService.id, withBusiness) : createService(withBusiness);
     },
     onSuccess: () => {
@@ -173,6 +190,7 @@ export default function Services() {
 
   const totalValue = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
   const avgPrice = services.length ? totalValue / services.length : 0;
+  const formatPrice = (value) => formatCurrency(Number(value || 0));
 
   const openNewService = () => {
     setEditingService(null);
@@ -212,11 +230,11 @@ export default function Services() {
         </Card>
         <Card className="border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">Average Price</p>
-          <p className="mt-2 text-2xl font-bold text-foreground">${avgPrice.toFixed(0)}</p>
+          <p className="mt-2 text-2xl font-bold text-foreground">{formatPrice(avgPrice)}</p>
         </Card>
         <Card className="border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">Catalog Value</p>
-          <p className="mt-2 text-2xl font-bold text-foreground">${totalValue.toFixed(0)}</p>
+          <p className="mt-2 text-2xl font-bold text-foreground">{formatPrice(totalValue)}</p>
         </Card>
       </div>
 
@@ -253,7 +271,7 @@ export default function Services() {
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div className="flex items-center gap-2 text-foreground">
                 <DollarSign className="h-4 w-4 text-primary" />
-                <span className="font-semibold">{Number(service.price || 0).toFixed(2)}</span>
+                <span className="font-semibold">{formatPrice(service.price)}</span>
               </div>
               <div className="flex gap-2">
                 {showInactive ? (

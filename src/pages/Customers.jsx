@@ -34,15 +34,32 @@ const statusColors = {
   Closed: "bg-green-500/20 text-green-300"
 };
 
+function formatPhone(phone) {
+  const digits = String(phone).replace(/\D/g, "");
+  if (digits.length === 0) return "";
+  if (digits.length < 4) return digits;
+  if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+}
+
+function normalizeTags(tags) {
+  if (!tags) return [];
+  if (Array.isArray(tags)) return tags.map((tag) => String(tag).trim()).filter(Boolean);
+  return String(tags)
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
 function customerToForm(customer) {
   if (!customer) return emptyForm;
 
   return {
     name: customer.name || "",
-    phone: customer.phone || "",
+    phone: formatPhone(customer.phone || ""),
     email: customer.email || "",
     status: customer.status || "New Lead",
-    tagsText: Array.isArray(customer.tags) ? customer.tags.join(", ") : "",
+    tagsText: normalizeTags(customer.tags).join(", "),
     notes: customer.notes || "",
     follow_up_date: customer.follow_up_date || "",
     follow_up_note: customer.follow_up_note || ""
@@ -52,13 +69,10 @@ function customerToForm(customer) {
 function formToCustomer(form) {
   return {
     name: form.name,
-    phone: form.phone,
+    phone: formatPhone(form.phone),
     email: form.email,
     status: form.status,
-    tags: form.tagsText
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean),
+    tags: normalizeTags(form.tagsText),
     notes: form.notes,
     follow_up_date: form.follow_up_date,
     follow_up_note: form.follow_up_note
@@ -98,7 +112,12 @@ function CustomerForm({ open, customer, onClose, onSave, isSaving }) {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label>Phone</Label>
-              <Input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className="mt-1 bg-[#111315]" />
+              <Input
+                value={form.phone}
+                onChange={(event) => updateField("phone", event.target.value)}
+                onBlur={(event) => updateField("phone", formatPhone(event.target.value))}
+                className="mt-1 bg-[#111315]"
+              />
             </div>
             <div>
               <Label>Email</Label>
@@ -348,7 +367,7 @@ export default function Customers() {
                           </div>
                         )}
                       </td>
-                      <td className="p-4 text-muted-foreground">{customer.phone || "-"}</td>
+                      <td className="p-4 text-muted-foreground">{customer.phone ? formatPhone(customer.phone) : "-"}</td>
                       <td className="p-4">
                         <Badge className={statusColors[customer.status] || "bg-muted text-muted-foreground"}>{customer.status || "New Lead"}</Badge>
                       </td>
@@ -391,7 +410,7 @@ export default function Customers() {
                   <div>
                     <h3 className="font-semibold text-foreground">{customer.name}</h3>
                     <p className="text-sm text-muted-foreground">{customer.email || "No email"}</p>
-                    <p className="text-sm text-muted-foreground">{customer.phone || "No phone"}</p>
+                    <p className="text-sm text-muted-foreground">{customer.phone ? formatPhone(customer.phone) : "No phone"}</p>
                   </div>
                   <Badge className={statusColors[customer.status] || "bg-muted text-muted-foreground"}>{customer.status || "New Lead"}</Badge>
                 </div>
