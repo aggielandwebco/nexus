@@ -114,8 +114,7 @@ function CustomerForm({ open, customer, onClose, onSave, isSaving }) {
               <Label>Phone</Label>
               <Input
                 value={form.phone}
-                onChange={(event) => updateField("phone", event.target.value)}
-                onBlur={(event) => updateField("phone", formatPhone(event.target.value))}
+                onChange={(event) => updateField("phone", formatPhone(event.target.value))}
                 className="mt-1 bg-[#111315]"
               />
             </div>

@@ -59,6 +59,24 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
     }
   }, [service, open]);
 
+  const handlePriceChange = (value) => {
+    const cleaned = String(value).replace(/[^0-9.]/g, "");
+    if (cleaned === "") {
+      setForm((prev) => ({ ...prev, price: "" }));
+      return;
+    }
+
+    const [integer, decimals = ""] = cleaned.split(".");
+    const normalized = `${integer}${decimals ? `.${decimals.slice(0, 2)}` : ""}`;
+
+    if (decimals.length > 0 && decimals.length < 2) {
+      setForm((prev) => ({ ...prev, price: normalized }));
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, price: formatCurrency(normalized) }));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!form.name.trim()) return;
@@ -95,9 +113,8 @@ function ServiceForm({ open, onOpenChange, service, onSave, isSaving }) {
               <Input
                 type="text"
                 value={form.price}
-                onChange={(event) => setForm((prev) => ({ ...prev, price: event.target.value }))}
+                onChange={(event) => handlePriceChange(event.target.value)}
                 onBlur={(event) => setForm((prev) => ({ ...prev, price: formatCurrency(event.target.value) }))}
-                onFocus={(event) => setForm((prev) => ({ ...prev, price: String(parseCurrency(event.target.value) || "") }))}
               />
             </div>
           </div>
