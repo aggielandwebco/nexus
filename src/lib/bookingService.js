@@ -37,9 +37,12 @@ export async function createBooking(bookingData) {
     throw new Error("Booking must include a date and time.");
   }
 
+  // Remove null/undefined fields before inserting
+  const insertPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== null && v !== undefined));
+
   const { data, error } = await supabase
     .from("bookings")
-    .insert(payload)
+    .insert(insertPayload)
     .select()
     .single();
 

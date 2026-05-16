@@ -26,9 +26,12 @@ export async function getCustomers({ archived = false } = {}) {
 }
 
 export async function createCustomer(customerData) {
+  const payload = cleanCustomerData(customerData);
+  const insertPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== null && v !== undefined));
+
   const { data, error } = await supabase
     .from("customers")
-    .insert([cleanCustomerData(customerData)])
+    .insert([insertPayload])
     .select()
     .single();
 

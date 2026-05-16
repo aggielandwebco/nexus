@@ -39,9 +39,12 @@ export async function createService(serviceData) {
     throw new Error("Service name is required.");
   }
 
+  // Remove null/undefined fields so we don't send unknown columns to the DB
+  const insertPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== null && v !== undefined));
+
   const { data, error } = await supabase
     .from("services")
-    .insert(payload)
+    .insert(insertPayload)
     .select()
     .single();
 
